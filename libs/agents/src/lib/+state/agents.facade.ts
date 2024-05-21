@@ -14,7 +14,7 @@ export class AgentsFacade {
    */
   loaded$ = this.store.select(AgentsFeature.selectLoaded);
   allAgents$ = this.store.select(AgentsFeature.selectAll);
-  selectedSelectedAgents$ = this.store.select(AgentsFeature.selectSelected);
+  selectSelectedAgents$ = this.store.select(AgentsFeature.selectSelected);
 
   /**
    * Use the initialization action to perform one

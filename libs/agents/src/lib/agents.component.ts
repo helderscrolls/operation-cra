@@ -10,7 +10,7 @@ import { AgentsFacade } from './+state/agents.facade';
   styleUrl: './agents.component.scss',
 })
 export class AgentsComponent implements OnInit {
-  agentsFacade = inject(AgentsFacade);
+  private readonly agentsFacade = inject(AgentsFacade);
 
   ngOnInit(): void {
     this.agentsFacade.init();
