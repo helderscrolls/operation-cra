@@ -23,11 +23,14 @@ export class MissionsEffects {
           return of(
             MissionsActions.loadMissionsSuccess({
               missions: [
-                { id: 1, topSecretMissionName: 'Save The Rainbow Kitten' },
-                { id: 2, topSecretMissionName: '007 From Wish' },
+                { id: 1, topSecretMissionName: '006: Save The Nyan Cat' },
+                {
+                  id: 2,
+                  topSecretMissionName: '009: The King of Zumba',
+                },
                 {
                   id: 3,
-                  topSecretMissionName: '009: The King of Zumba',
+                  topSecretMissionName: '007: From Wish',
                 },
               ],
             })

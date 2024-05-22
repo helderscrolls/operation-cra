@@ -1,0 +1,26 @@
+<table class="timesheet-table">
+  <thead>
+    <tr>
+      <th>Projects</th>
+      <th *ngFor="let day of days">
+        {{ day | date : 'EEE dd' }}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let mission of missions$ | async">
+      <td class="project-name">{{ mission.topSecretMissionName }}</td>
+      <td *ngFor="let day of days">
+        <div *ngFor="let agent of agents$ | async">
+          <label>
+            <input
+              type="checkbox"
+              (change)="onAgentChange(+mission.id, day, +agent.id, $event)"
+            />
+            {{ agent.name }}
+          </label>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>

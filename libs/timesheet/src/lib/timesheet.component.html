@@ -1,0 +1,16 @@
+<h1>Monthly Timesheet</h1>
+
+<div>
+  <lib-month-selector
+    [currentMonth]="currentMonth"
+    [currentYear]="currentYear"
+    (monthChanged)="onMonthChanged($event)"
+  ></lib-month-selector>
+
+  <lib-month-grid
+    [days]="days"
+    [missions$]="missions$"
+    [agents$]="agents$"
+    (assignmentChanged)="onAssignmentChanged($event)"
+  ></lib-month-grid>
+</div>

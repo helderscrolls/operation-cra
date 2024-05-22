@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@operation-cra/agents": ["libs/agents/src/index.ts"],
-      "@operation-cra/missions": ["libs/missions/src/index.ts"]
+      "@operation-cra/missions": ["libs/missions/src/index.ts"],
+      "@operation-cra/timesheet": ["libs/timesheet/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

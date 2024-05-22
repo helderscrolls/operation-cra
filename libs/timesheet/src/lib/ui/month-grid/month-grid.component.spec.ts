@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MissionsComponent } from './missions.component';
+import { MonthGridComponent } from './month-grid.component';
 
-describe('MissionsComponent', () => {
-  let component: MissionsComponent;
-  let fixture: ComponentFixture<MissionsComponent>;
+describe('MonthGridComponent', () => {
+  let component: MonthGridComponent;
+  let fixture: ComponentFixture<MonthGridComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [MissionsComponent],
+      imports: [MonthGridComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(MissionsComponent);
+    fixture = TestBed.createComponent(MonthGridComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
