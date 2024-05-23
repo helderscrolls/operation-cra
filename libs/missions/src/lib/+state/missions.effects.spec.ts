@@ -5,7 +5,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 
-import * as MissionsActions from './missions.actions';
+import { MissionsActions } from './missions.actions';
 import { MissionsEffects } from './missions.effects';
 
 describe('MissionsEffects', () => {
@@ -27,13 +27,25 @@ describe('MissionsEffects', () => {
 
   describe('init$', () => {
     it('should work', () => {
-      actions = hot('-a-|', { a: MissionsActions.initMissions() });
+      actions = hot('-a-|', { a: MissionsActions.loadMissions() });
 
       const expected = hot('-a-|', {
-        a: MissionsActions.loadMissionsSuccess({ missions: [] }),
+        a: MissionsActions.loadMissionsSuccess({
+          missions: [
+            { id: 1, topSecretMissionName: '006: Save The Nyan Cat' },
+            {
+              id: 2,
+              topSecretMissionName: '009: The King of Zumba',
+            },
+            {
+              id: 3,
+              topSecretMissionName: '007: From Wish',
+            },
+          ],
+        }),
       });
 
-      expect(effects.init$).toBeObservable(expected);
+      expect(effects.loadMissions$).toBeObservable(expected);
     });
   });
 });

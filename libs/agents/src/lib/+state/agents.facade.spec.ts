@@ -2,35 +2,32 @@ import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { Store, StoreModule } from '@ngrx/store';
-import { readFirst } from '@nx/angular/testing';
 
-import * as AgentsActions from './agents.actions';
+import { firstValueFrom } from 'rxjs';
+import { AgentsActions } from './agents.actions';
 import { AgentsEffects } from './agents.effects';
 import { AgentsFacade } from './agents.facade';
-import {
-  AGENTS_FEATURE_KEY,
-  AgentsState,
-  agentsReducer,
-} from './agents.feature';
+import { AgentsFeature } from './agents.feature';
 import { AgentsEntity } from './agents.models';
-
-interface TestSchema {
-  agents: AgentsState;
-}
 
 describe('AgentsFacade', () => {
   let facade: AgentsFacade;
-  let store: Store<TestSchema>;
-  const createAgentsEntity = (id: string, name = ''): AgentsEntity => ({
+  let store: Store;
+  const createAgentsEntity = (
+    id: string | number,
+    name: string,
+    availableVacations: number
+  ): AgentsEntity => ({
     id,
     name: name || `name-${id}`,
+    availableVacations: availableVacations || 69,
   });
 
   describe('used in NgModule', () => {
     beforeEach(() => {
       @NgModule({
         imports: [
-          StoreModule.forFeature(AGENTS_FEATURE_KEY, agentsReducer),
+          StoreModule.forFeature(AgentsFeature),
           EffectsModule.forFeature([AgentsEffects]),
         ],
         providers: [AgentsFacade],
@@ -54,40 +51,41 @@ describe('AgentsFacade', () => {
     /**
      * The initially generated facade::loadAll() returns empty array
      */
-    it('loadAll() should return empty list with loaded == true', async () => {
-      let list = await readFirst(facade.allAgents$);
-      let isLoaded = await readFirst(facade.loaded$);
+    it('loadAll() should return empty list with loaded == false', async () => {
+      let list = await firstValueFrom(facade.allAgents$);
+      let isLoaded = await firstValueFrom(facade.loaded$);
 
       expect(list.length).toBe(0);
       expect(isLoaded).toBe(false);
 
-      facade.init();
-
-      list = await readFirst(facade.allAgents$);
-      isLoaded = await readFirst(facade.loaded$);
+      list = await firstValueFrom(facade.allAgents$);
+      isLoaded = await firstValueFrom(facade.loaded$);
 
       expect(list.length).toBe(0);
-      expect(isLoaded).toBe(true);
+      expect(isLoaded).toBe(false);
     });
 
     /**
      * Use `loadAgentsSuccess` to manually update list
      */
     it('allAgents$ should return the loaded list; and loaded flag == true', async () => {
-      let list = await readFirst(facade.allAgents$);
-      let isLoaded = await readFirst(facade.loaded$);
+      let list = await firstValueFrom(facade.allAgents$);
+      let isLoaded = await firstValueFrom(facade.loaded$);
 
       expect(list.length).toBe(0);
       expect(isLoaded).toBe(false);
 
       store.dispatch(
         AgentsActions.loadAgentsSuccess({
-          agents: [createAgentsEntity('AAA'), createAgentsEntity('BBB')],
+          agents: [
+            createAgentsEntity('1', 'Janette Bond', 666),
+            createAgentsEntity('2', 'John Bond', 420),
+          ],
         })
       );
 
-      list = await readFirst(facade.allAgents$);
-      isLoaded = await readFirst(facade.loaded$);
+      list = await firstValueFrom(facade.allAgents$);
+      isLoaded = await firstValueFrom(facade.loaded$);
 
       expect(list.length).toBe(2);
       expect(isLoaded).toBe(true);

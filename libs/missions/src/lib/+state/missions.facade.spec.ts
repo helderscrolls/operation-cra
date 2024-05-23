@@ -2,35 +2,30 @@ import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { Store, StoreModule } from '@ngrx/store';
-import { readFirst } from '@nx/angular/testing';
 
-import * as MissionsActions from './missions.actions';
+import { firstValueFrom } from 'rxjs';
+import { MissionsActions } from './missions.actions';
 import { MissionsEffects } from './missions.effects';
 import { MissionsFacade } from './missions.facade';
-import {
-  MISSIONS_FEATURE_KEY,
-  MissionsState,
-  missionsReducer,
-} from './missions.feature';
+import { MissionsFeature } from './missions.feature';
 import { MissionsEntity } from './missions.models';
-
-interface TestSchema {
-  missions: MissionsState;
-}
 
 describe('MissionsFacade', () => {
   let facade: MissionsFacade;
-  let store: Store<TestSchema>;
-  const createMissionsEntity = (id: string, name = ''): MissionsEntity => ({
+  let store: Store;
+  const createMissionsEntity = (
+    id: string | number,
+    topSecretMissionName: string
+  ): MissionsEntity => ({
     id,
-    name: name || `name-${id}`,
+    topSecretMissionName: topSecretMissionName || `name-${id}`,
   });
 
   describe('used in NgModule', () => {
     beforeEach(() => {
       @NgModule({
         imports: [
-          StoreModule.forFeature(MISSIONS_FEATURE_KEY, missionsReducer),
+          StoreModule.forFeature(MissionsFeature),
           EffectsModule.forFeature([MissionsEffects]),
         ],
         providers: [MissionsFacade],
@@ -54,40 +49,41 @@ describe('MissionsFacade', () => {
     /**
      * The initially generated facade::loadAll() returns empty array
      */
-    it('loadAll() should return empty list with loaded == true', async () => {
-      let list = await readFirst(facade.allMissions$);
-      let isLoaded = await readFirst(facade.loaded$);
+    it('loadAll() should return empty list with loaded == false', async () => {
+      let list = await firstValueFrom(facade.allMissions$);
+      let isLoaded = await firstValueFrom(facade.loaded$);
 
       expect(list.length).toBe(0);
       expect(isLoaded).toBe(false);
 
-      facade.init();
-
-      list = await readFirst(facade.allMissions$);
-      isLoaded = await readFirst(facade.loaded$);
+      list = await firstValueFrom(facade.allMissions$);
+      isLoaded = await firstValueFrom(facade.loaded$);
 
       expect(list.length).toBe(0);
-      expect(isLoaded).toBe(true);
+      expect(isLoaded).toBe(false);
     });
 
     /**
      * Use `loadMissionsSuccess` to manually update list
      */
     it('allMissions$ should return the loaded list; and loaded flag == true', async () => {
-      let list = await readFirst(facade.allMissions$);
-      let isLoaded = await readFirst(facade.loaded$);
+      let list = await firstValueFrom(facade.allMissions$);
+      let isLoaded = await firstValueFrom(facade.loaded$);
 
       expect(list.length).toBe(0);
       expect(isLoaded).toBe(false);
 
       store.dispatch(
         MissionsActions.loadMissionsSuccess({
-          missions: [createMissionsEntity('AAA'), createMissionsEntity('BBB')],
+          missions: [
+            createMissionsEntity(1, '069: Save Agent Malibou'),
+            createMissionsEntity(2, '420: The Green Magic'),
+          ],
         })
       );
 
-      list = await readFirst(facade.allMissions$);
-      isLoaded = await readFirst(facade.loaded$);
+      list = await firstValueFrom(facade.allMissions$);
+      isLoaded = await firstValueFrom(facade.loaded$);
 
       expect(list.length).toBe(2);
       expect(isLoaded).toBe(true);

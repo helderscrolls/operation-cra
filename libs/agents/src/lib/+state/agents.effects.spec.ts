@@ -5,7 +5,7 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 
-import * as AgentsActions from './agents.actions';
+import { AgentsActions } from './agents.actions';
 import { AgentsEffects } from './agents.effects';
 
 describe('AgentsEffects', () => {
@@ -27,13 +27,19 @@ describe('AgentsEffects', () => {
 
   describe('init$', () => {
     it('should work', () => {
-      actions = hot('-a-|', { a: AgentsActions.initAgents() });
+      actions = hot('-a-|', { a: AgentsActions.loadAgents() });
 
       const expected = hot('-a-|', {
-        a: AgentsActions.loadAgentsSuccess({ agents: [] }),
+        a: AgentsActions.loadAgentsSuccess({
+          agents: [
+            { id: 1, name: 'Deder', availableVacations: 7 },
+            { id: 2, name: 'Gecko', availableVacations: 7 },
+            { id: 3, name: 'Valkyrie', availableVacations: 7 },
+          ],
+        }),
       });
 
-      expect(effects.init$).toBeObservable(expected);
+      expect(effects.loadAgents$).toBeObservable(expected);
     });
   });
 });
