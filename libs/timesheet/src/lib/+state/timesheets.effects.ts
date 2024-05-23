@@ -1,16 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
 import { catchError, of, switchMap, tap } from 'rxjs';
 import { TimesheetsActions } from './timesheets.actions';
-import { TimesheetsFacade } from './timesheets.facade';
 import { TimesheetsEntity } from './timesheets.models';
 
 @Injectable()
 export class TimesheetsEffects {
   private actions$ = inject(Actions);
-  private store = inject(Store);
-  private timesheetsFacade = inject(TimesheetsFacade);
 
   loadTimesheets$ = createEffect(() =>
     this.actions$.pipe(

@@ -31,7 +31,7 @@ export const TimesheetsFeature = createFeature({
       timesheetsAdapter.removeOne(timesheetId, state)
     ),
     on(TimesheetsActions.loadTimesheetsSuccess, (state, { timesheets }) => {
-      return timesheetsAdapter.addMany(timesheets, {
+      return timesheetsAdapter.upsertMany(timesheets, {
         ...state,
         loaded: true,
       });
