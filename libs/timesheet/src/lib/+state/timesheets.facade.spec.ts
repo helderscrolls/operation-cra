@@ -2,35 +2,34 @@ import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { EffectsModule } from '@ngrx/effects';
 import { Store, StoreModule } from '@ngrx/store';
-import { readFirst } from '@nx/angular/testing';
 
-import * as TimesheetsActions from './timesheets.actions';
+import { firstValueFrom } from 'rxjs';
+import { TimesheetsActions } from './timesheets.actions';
 import { TimesheetsEffects } from './timesheets.effects';
 import { TimesheetsFacade } from './timesheets.facade';
-import {
-  TIMESHEETS_FEATURE_KEY,
-  TimesheetsState,
-  timesheetsReducer,
-} from './timesheets.feature';
+import { TimesheetsFeature } from './timesheets.feature';
 import { TimesheetsEntity } from './timesheets.models';
-
-interface TestSchema {
-  timesheets: TimesheetsState;
-}
 
 describe('TimesheetsFacade', () => {
   let facade: TimesheetsFacade;
-  let store: Store<TestSchema>;
-  const createTimesheetsEntity = (id: string, name = ''): TimesheetsEntity => ({
+  let store: Store;
+  const createTimesheetsEntity = (
+    id: string,
+    missionId: number,
+    date: string,
+    agentId: number | null
+  ): TimesheetsEntity => ({
     id,
-    name: name || `name-${id}`,
+    missionId,
+    date,
+    agentId,
   });
 
   describe('used in NgModule', () => {
     beforeEach(() => {
       @NgModule({
         imports: [
-          StoreModule.forFeature(TIMESHEETS_FEATURE_KEY, timesheetsReducer),
+          StoreModule.forFeature(TimesheetsFeature),
           EffectsModule.forFeature([TimesheetsEffects]),
         ],
         providers: [TimesheetsFacade],
@@ -55,16 +54,16 @@ describe('TimesheetsFacade', () => {
      * The initially generated facade::loadAll() returns empty array
      */
     it('loadAll() should return empty list with loaded == true', async () => {
-      let list = await readFirst(facade.allTimesheets$);
-      let isLoaded = await readFirst(facade.loaded$);
+      let list = await firstValueFrom(facade.allTimesheets$);
+      let isLoaded = await firstValueFrom(facade.loaded$);
 
       expect(list.length).toBe(0);
       expect(isLoaded).toBe(false);
 
       facade.init();
 
-      list = await readFirst(facade.allTimesheets$);
-      isLoaded = await readFirst(facade.loaded$);
+      list = await firstValueFrom(facade.allTimesheets$);
+      isLoaded = await firstValueFrom(facade.loaded$);
 
       expect(list.length).toBe(0);
       expect(isLoaded).toBe(true);
@@ -74,8 +73,8 @@ describe('TimesheetsFacade', () => {
      * Use `loadTimesheetsSuccess` to manually update list
      */
     it('allTimesheets$ should return the loaded list; and loaded flag == true', async () => {
-      let list = await readFirst(facade.allTimesheets$);
-      let isLoaded = await readFirst(facade.loaded$);
+      let list = await firstValueFrom(facade.allTimesheets$);
+      let isLoaded = await firstValueFrom(facade.loaded$);
 
       expect(list.length).toBe(0);
       expect(isLoaded).toBe(false);
@@ -83,14 +82,14 @@ describe('TimesheetsFacade', () => {
       store.dispatch(
         TimesheetsActions.loadTimesheetsSuccess({
           timesheets: [
-            createTimesheetsEntity('AAA'),
-            createTimesheetsEntity('BBB'),
+            createTimesheetsEntity('3-5/4/2024', 1, '2024-04-05', 1),
+            createTimesheetsEntity('3-6/4/2024', 2, '2025-04-06', 2),
           ],
         })
       );
 
-      list = await readFirst(facade.allTimesheets$);
-      isLoaded = await readFirst(facade.loaded$);
+      list = await firstValueFrom(facade.allTimesheets$);
+      isLoaded = await firstValueFrom(facade.loaded$);
 
       expect(list.length).toBe(2);
       expect(isLoaded).toBe(true);
