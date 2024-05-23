@@ -16,6 +16,10 @@ Run `npx nx serve operation-cra` to start the development server. Happy coding!
 
 Run `npx nx build operation-cra` to build the application. The build artifacts are stored in the output directory (e.g. `dist/` or `build/`), ready to be deployed.
 
+## Code Coverage
+
+Run `npm run test:all:coverage` to generate code coverage reports for all Apps/Libs in this Nx Workspace.
+
 ## Running tasks
 
 To execute tasks with Nx use the following syntax:
@@ -37,4 +41,3 @@ npx nx run-many -t <target1> <target2> -p <proj1> <proj2>
 ```
 
 Targets can be defined in the `package.json` or `projects.json`. Learn more [in the docs](https://nx.dev/features/run-tasks).
-
