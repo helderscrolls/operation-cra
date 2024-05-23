@@ -11,15 +11,20 @@
     <tr *ngFor="let mission of missions$ | async">
       <td class="project-name">{{ mission.topSecretMissionName }}</td>
       <td *ngFor="let day of days">
-        <div *ngFor="let agent of agents$ | async">
-          <label>
-            <input
-              type="checkbox"
-              (change)="onAgentChange(+mission.id, day, +agent.id, $event)"
-            />
-            {{ agent.name }}
-          </label>
-        </div>
+        <select (change)="onAgentChange(+mission.id, day, $event)">
+          <option [value]="null">None</option>
+          <ng-container *ngIf="timesheetsMap$ | async as timesheetsMap">
+            <option
+              *ngFor="let agent of agents$ | async"
+              [value]="agent.id"
+              [selected]="
+                getAssignedAgent(+mission.id, day, timesheetsMap) === agent.id
+              "
+            >
+              {{ agent.name }}
+            </option>
+          </ng-container>
+        </select>
       </td>
     </tr>
   </tbody>

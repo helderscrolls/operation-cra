@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 
 import { TimesheetsActions } from './timesheets.actions';
 import { TimesheetsFeature } from './timesheets.feature';
+import { TimesheetsEntity } from './timesheets.models';
 
 @Injectable()
 export class TimesheetsFacade {
@@ -21,6 +22,12 @@ export class TimesheetsFacade {
    * or more tasks in your Effects.
    */
   init() {
-    this.store.dispatch(TimesheetsActions.loadTimesheets({ timesheets: [] }));
+    this.store.dispatch(TimesheetsActions.loadTimesheets());
+  }
+
+  saveTimesheets(timesheets: TimesheetsEntity) {
+    this.store.dispatch(
+      TimesheetsActions.addTimesheet({ timesheet: timesheets })
+    );
   }
 }

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { catchError, of, switchMap } from 'rxjs';
+import { catchError, of, switchMap, tap } from 'rxjs';
 import { TimesheetsActions } from './timesheets.actions';
 import { TimesheetsFacade } from './timesheets.facade';
 
@@ -11,16 +11,16 @@ export class TimesheetsEffects {
   private store = inject(Store);
   private timesheetsFacade = inject(TimesheetsFacade);
 
-  loadAssignments$ = createEffect(() =>
+  loadTimesheets$ = createEffect(() =>
     this.actions$.pipe(
       ofType(TimesheetsActions.loadTimesheets),
       switchMap(() => {
-        const storedAssignments = localStorage.getItem('timesheets');
+        const storedTimesheets = localStorage.getItem('timesheets');
 
-        if (storedAssignments) {
+        if (storedTimesheets) {
           return of(
             TimesheetsActions.loadTimesheetsSuccess({
-              timesheets: JSON.parse(storedAssignments),
+              timesheets: JSON.parse(storedTimesheets),
             })
           );
         } else {
@@ -32,28 +32,29 @@ export class TimesheetsEffects {
         }
       }),
       catchError((error) => {
-        console.error('Error loading assignments', error);
+        console.error('Error loading timesheets', error);
         return of(TimesheetsActions.loadTimesheetsFailure({ error }));
       })
     )
   );
 
-  // saveAssignments$ = createEffect(
-  //   () =>
-  //     this.actions$.pipe(
-  //       ofType(
-  //         TimesheetsActions.addTimesheet,
-  //         TimesheetsActions.removeTimesheet
-  //       ),
-  //       withLatestFrom(this.timesheetsFacade.allTimesheets$),
-  //       tap(([_, timesheetsState]) => {
-  //         const timesheets = timesheetsState.entities;
-  //         const timesheetsArray = Object.keys(timesheets).map(
-  //           (key) => timesheets[key]
-  //         );
-  //         localStorage.setItem('timesheets', JSON.stringify(timesheetsArray));
-  //       })
-  //     ),
-  //   { dispatch: false }
-  // );
+  saveTimesheets$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(TimesheetsActions.addTimesheet),
+        tap((action) => {
+          // Retrieve the existing timesheets from the localStorage or an empty array
+          const timesheets = JSON.parse(
+            localStorage.getItem('timesheets') ?? '[]'
+          );
+
+          timesheets.push(action.timesheet);
+
+          // Stringify the updated array and store it back to the localStorage
+          localStorage.setItem('timesheets', JSON.stringify(timesheets));
+          console.log('here', timesheets);
+        })
+      ),
+    { dispatch: false }
+  );
 }

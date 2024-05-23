@@ -24,44 +24,14 @@ export const TimesheetsFeature = createFeature({
   name: 'timesheets',
   reducer: createReducer(
     initialTimesheetsState,
-    on(TimesheetsActions.addTimesheet, (state, { timesheet }) => {
-      const existingTimesheet = state.entities[timesheet.id];
-
-      let updatedTimesheet: TimesheetsEntity;
-      if (existingTimesheet) {
-        updatedTimesheet = {
-          ...existingTimesheet,
-          agentIds: [
-            ...new Set([...existingTimesheet.agentIds, ...timesheet.agentIds]),
-          ],
-        };
-      } else {
-        updatedTimesheet = timesheet;
-      }
-
-      return timesheetsAdapter.upsertOne(updatedTimesheet, state);
-    }),
-    on(TimesheetsActions.removeTimesheet, (state, { timesheet }) => {
-      const existingTimesheet = state.entities[timesheet.id];
-
-      if (!existingTimesheet) return state;
-
-      const updatedAgentIds = existingTimesheet.agentIds.filter(
-        (id) => !timesheet.agentIds.includes(id)
-      );
-      const updatedTimesheet: TimesheetsEntity = {
-        ...existingTimesheet,
-        agentIds: updatedAgentIds,
-      };
-
-      if (updatedAgentIds.length === 0) {
-        return timesheetsAdapter.removeOne(timesheet.id, state);
-      }
-
-      return timesheetsAdapter.upsertOne(updatedTimesheet, state);
-    }),
+    on(TimesheetsActions.addTimesheet, (state, { timesheet }) =>
+      timesheetsAdapter.addOne(timesheet, state)
+    ),
+    on(TimesheetsActions.removeTimesheet, (state, { timesheetId }) =>
+      timesheetsAdapter.removeOne(timesheetId, state)
+    ),
     on(TimesheetsActions.loadTimesheetsSuccess, (state, { timesheets }) => {
-      return timesheetsAdapter.setAll(timesheets, {
+      return timesheetsAdapter.addMany(timesheets, {
         ...state,
         loaded: true,
       });
