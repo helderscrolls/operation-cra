@@ -13,6 +13,7 @@ export class AppComponent implements OnInit {
   private readonly agentsFacade = inject(AgentsFacade);
   private readonly missionsFacade = inject(MissionsFacade);
   private readonly timesheetsFacade = inject(TimesheetsFacade);
+
   ngOnInit(): void {
     this.agentsFacade.init();
     this.missionsFacade.init();
