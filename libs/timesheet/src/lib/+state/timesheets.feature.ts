@@ -25,7 +25,7 @@ export const TimesheetsFeature = createFeature({
   reducer: createReducer(
     initialTimesheetsState,
     on(TimesheetsActions.addTimesheet, (state, { timesheet }) =>
-      timesheetsAdapter.addOne(timesheet, state)
+      timesheetsAdapter.upsertOne(timesheet, state)
     ),
     on(TimesheetsActions.removeTimesheet, (state, { timesheetId }) =>
       timesheetsAdapter.removeOne(timesheetId, state)

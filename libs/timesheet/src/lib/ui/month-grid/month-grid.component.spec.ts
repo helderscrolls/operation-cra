@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
 import { MonthGridComponent } from './month-grid.component';
 
 describe('MonthGridComponent', () => {
@@ -12,6 +13,7 @@ describe('MonthGridComponent', () => {
 
     fixture = TestBed.createComponent(MonthGridComponent);
     component = fixture.componentInstance;
+    component.timesheets$ = of([]);
     fixture.detectChanges();
   });
 
