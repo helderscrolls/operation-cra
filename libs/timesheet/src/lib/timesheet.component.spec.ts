@@ -41,10 +41,23 @@ describe('TimesheetComponent', () => {
     missionsFacade = TestBed.inject(MissionsFacade);
     timesheetsFacade = TestBed.inject(TimesheetsFacade);
     fixture.detectChanges();
+
+    jest.clearAllMocks();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should toggle dark mode', () => {
+    const classListSpy = jest.spyOn(
+      document.documentElement.classList,
+      'toggle'
+    );
+
+    component.toggleDarkMode();
+
+    expect(classListSpy).toHaveBeenCalledWith('dark');
   });
 
   it('should load days on initialization', () => {
