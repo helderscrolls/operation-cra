@@ -1,41 +1,58 @@
-<table class="timesheet-table">
-  <thead>
-    <tr>
-      <th>Projects</th>
-      @for (day of days; track day) {
-      <th>
-        {{ day | date : 'EEE dd' }}
-      </th>
-      }
-    </tr>
-  </thead>
-  <tbody>
-    @for (mission of missions$ | async; track mission.id) {
-    <tr>
-      <td class="project-name">{{ mission.topSecretMissionName }}</td>
-
-      @for(day of days; track day) {
-      <td>
-        <select (change)="onAgentChange(+mission.id, day, $event)">
-          <option [value]="null">None</option>
-          @if (timesheetsMap$ | async; as timesheetsMap) {
-          <ng-container>
-            @for ( agent of agents$ | async; track agent.id) {
-            <option
-              [value]="agent.id"
-              [selected]="
-                getAssignedAgent(+mission.id, day, timesheetsMap) === agent.id
-              "
-            >
-              {{ agent.name }}
-            </option>
-            }
-          </ng-container>
+<section class="p-6 bg-white rounded shadow overflow-x-auto mx-auto max-w-7xl">
+  <div class="overflow-x-auto">
+    <table class="min-w-full border-separate border-spacing-0">
+      <thead>
+        <tr class="bg-gray-200">
+          <th
+            class="border text-left bg-gray-200 px-4 py-2 sticky left-0 z-10"
+            style="width: 200px"
+          >
+            Projects
+          </th>
+          @for (day of days; track day) {
+          <th class="px-2 py-1 border text-center whitespace-nowrap">
+            {{ day | date : 'EEE dd' }}
+          </th>
           }
-        </select>
-      </td>
-      }
-    </tr>
-    }
-  </tbody>
-</table>
+        </tr>
+      </thead>
+      <tbody>
+        @for (mission of missions$ | async; track mission.id) {
+        <tr class="hover:bg-gray-100">
+          <td
+            class="border font-bold text-gray-700 whitespace-nowrap overflow-hidden bg-white px-4 py-2 sticky left-0 z-10"
+            style="width: 200px"
+          >
+            {{ mission.topSecretMissionName }}
+          </td>
+          @for(day of days; track day) {
+          <td class="px-2 py-1 border">
+            <select
+              class="px-2 py-1 border rounded border-gray-300 w-28 text-sm leading-tight"
+              (change)="onAgentChange(+mission.id, day, $event)"
+            >
+              <option [value]="null">None</option>
+              @if (timesheetsMap$ | async; as timesheetsMap) {
+              <ng-container>
+                @for (agent of agents$ | async; track agent.id) {
+                <option
+                  [value]="agent.id"
+                  [selected]="
+                    getAssignedAgent(+mission.id, day, timesheetsMap) ===
+                    agent.id
+                  "
+                >
+                  {{ agent.name }}
+                </option>
+                }
+              </ng-container>
+              }
+            </select>
+          </td>
+          }
+        </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

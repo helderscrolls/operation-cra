@@ -1,6 +1,14 @@
-<div class="header-controls">
-  <label for="month-select">Select Month:</label>
-  <select id="month-select" (change)="onMonthChange($event)">
+<div
+  class="flex flex-col sm:flex-row items-center justify-center p-4 bg-gray-100 rounded shadow mb-6"
+>
+  <label for="month-select" class="mr-2 font-bold text-gray-700"
+    >Select Month:</label
+  >
+  <select
+    id="month-select"
+    class="p-2 border rounded border-gray-300"
+    (change)="onMonthChange($event)"
+  >
     <option
       *ngFor="let i of [].constructor(12); let index = index"
       [value]="index"
@@ -9,5 +17,5 @@
       {{ getMonthName(index) }}
     </option>
   </select>
-  <span class="current-year">{{ currentYear }}</span>
+  <span class="ml-4 font-bold text-gray-700">{{ currentYear }}</span>
 </div>
