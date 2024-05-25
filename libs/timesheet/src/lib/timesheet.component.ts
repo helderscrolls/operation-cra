@@ -55,4 +55,8 @@ export class TimesheetComponent implements OnInit {
       agentId: event.assigned ? event.agentId : null,
     });
   }
+
+  toggleDarkMode() {
+    document.documentElement.classList.toggle('dark');
+  }
 }
