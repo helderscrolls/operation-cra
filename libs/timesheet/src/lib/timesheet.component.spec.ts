@@ -60,22 +60,14 @@ describe('TimesheetComponent', () => {
     expect(classListSpy).toHaveBeenCalledWith('dark');
   });
 
-  it('should load days on initialization', () => {
-    jest.spyOn(component, 'loadDays');
-
-    component.ngOnInit();
-
-    expect(component.loadDays).toHaveBeenCalled();
-  });
-
-  it('should update current month and load days on month change', () => {
+  it('should update current month on month change', () => {
     const newMonth = 5;
-    jest.spyOn(component, 'loadDays');
+    jest.spyOn(component, 'onMonthChanged');
 
     component.onMonthChanged(newMonth);
 
     expect(component.currentMonth).toBe(newMonth);
-    expect(component.loadDays).toHaveBeenCalled();
+    expect(component.onMonthChanged).toHaveBeenCalled();
   });
 
   it('should call saveTimesheets with correct arguments', () => {

@@ -33,7 +33,7 @@ export class TimesheetComponent implements OnInit {
     this.loadDays();
   }
 
-  loadDays(): void {
+  private loadDays(): void {
     this.days = getDaysInMonth(this.currentMonth, this.currentYear);
   }
 
