@@ -1,12 +1,14 @@
 <div
-  class="flex flex-col sm:flex-row items-center justify-center p-4 bg-gray-100 rounded shadow mb-6"
+  class="flex items-center justify-center p-4 bg-gray-100 dark:bg-gray-800 rounded shadow mb-6 w-auto"
 >
-  <label for="month-select" class="mr-2 font-bold text-gray-700"
+  <label
+    for="month-select"
+    class="mr-2 font-bold text-gray-700 dark:text-gray-200"
     >Select Month:</label
   >
   <select
     id="month-select"
-    class="p-2 border rounded border-gray-300"
+    class="p-2 border rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200"
     (change)="onMonthChange($event)"
   >
     <option
@@ -17,5 +19,7 @@
       {{ getMonthName(index) }}
     </option>
   </select>
-  <span class="ml-4 font-bold text-gray-700">{{ currentYear }}</span>
+  <span class="ml-4 font-bold text-gray-700 dark:text-gray-200">{{
+    currentYear
+  }}</span>
 </div>

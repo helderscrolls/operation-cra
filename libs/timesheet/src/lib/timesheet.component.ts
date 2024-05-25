@@ -33,7 +33,7 @@ export class TimesheetComponent implements OnInit {
     this.loadDays();
   }
 
-  loadDays(): void {
+  private loadDays(): void {
     this.days = getDaysInMonth(this.currentMonth, this.currentYear);
   }
 
@@ -54,5 +54,9 @@ export class TimesheetComponent implements OnInit {
       date: event.date,
       agentId: event.assigned ? event.agentId : null,
     });
+  }
+
+  toggleDarkMode() {
+    document.documentElement.classList.toggle('dark');
   }
 }

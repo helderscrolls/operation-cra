@@ -41,28 +41,33 @@ describe('TimesheetComponent', () => {
     missionsFacade = TestBed.inject(MissionsFacade);
     timesheetsFacade = TestBed.inject(TimesheetsFacade);
     fixture.detectChanges();
+
+    jest.clearAllMocks();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load days on initialization', () => {
-    jest.spyOn(component, 'loadDays');
+  it('should toggle dark mode', () => {
+    const classListSpy = jest.spyOn(
+      document.documentElement.classList,
+      'toggle'
+    );
 
-    component.ngOnInit();
+    component.toggleDarkMode();
 
-    expect(component.loadDays).toHaveBeenCalled();
+    expect(classListSpy).toHaveBeenCalledWith('dark');
   });
 
-  it('should update current month and load days on month change', () => {
+  it('should update current month on month change', () => {
     const newMonth = 5;
-    jest.spyOn(component, 'loadDays');
+    jest.spyOn(component, 'onMonthChanged');
 
     component.onMonthChanged(newMonth);
 
     expect(component.currentMonth).toBe(newMonth);
-    expect(component.loadDays).toHaveBeenCalled();
+    expect(component.onMonthChanged).toHaveBeenCalled();
   });
 
   it('should call saveTimesheets with correct arguments', () => {

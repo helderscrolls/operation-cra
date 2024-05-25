@@ -1,10 +1,12 @@
-<section class="p-6 bg-white rounded shadow overflow-x-auto mx-auto max-w-7xl">
+<section
+  class="p-6 bg-white dark:bg-gray-800 rounded shadow overflow-x-auto mx-auto max-w-7xl"
+>
   <div class="overflow-x-auto">
     <table class="min-w-full border-separate border-spacing-0">
       <thead>
-        <tr class="bg-gray-200">
+        <tr class="bg-gray-200 dark:bg-gray-700">
           <th
-            class="border text-left bg-gray-200 px-4 py-2 sticky left-0 z-10"
+            class="border text-left bg-gray-200 dark:bg-gray-700 px-4 py-2 sticky left-0 z-10"
             style="width: 200px"
           >
             Projects
@@ -18,9 +20,9 @@
       </thead>
       <tbody>
         @for (mission of missions$ | async; track mission.id) {
-        <tr class="hover:bg-gray-100">
+        <tr class="hover:bg-gray-100 dark:hover:bg-gray-600">
           <td
-            class="border font-bold text-gray-700 whitespace-nowrap overflow-hidden bg-white px-4 py-2 sticky left-0 z-10"
+            class="border font-bold text-gray-700 dark:text-gray-200 whitespace-nowrap overflow-hidden bg-white dark:bg-gray-800 px-4 py-2 sticky left-0 z-10"
             style="width: 200px"
           >
             {{ mission.topSecretMissionName }}
@@ -28,7 +30,7 @@
           @for(day of days; track day) {
           <td class="px-2 py-1 border">
             <select
-              class="px-2 py-1 border rounded border-gray-300 w-28 text-sm leading-tight"
+              class="px-2 py-1 border rounded border-gray-300 dark:border-gray-600 w-28 text-sm leading-tight bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-200"
               (change)="onAgentChange(+mission.id, day, $event)"
             >
               <option [value]="null">None</option>
